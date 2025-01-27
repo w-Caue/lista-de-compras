@@ -6,27 +6,165 @@
     @include('includes.loading')
     <!-- ./Loading -->
 
-    <div class="relative grid sm:grid-cols-2 gap-4 items-start">
+    <div class="relative grid sm:grid-cols-4 gap-4 items-start">
 
-        <div class="bg-white p-3 rounded-lg shadow-lg">
-            <h1 class="text-gray-400 uppercase text-sm tracking-widest border-b">informações</h1>
-            <div class="mt-5">
-                <x-inputs.label value="Descrição" />
-                <x-input wire:model="descricao" class="uppercase tracking-widest text-sm"
-                    placeholder="insira uma descrição" disabled />
+        <div class="sm:col-span-3">
+            <div class="bg-white p-3 rounded-lg shadow-lg">
+                <h1 class="text-gray-400 uppercase text-sm tracking-widest border-b">informações</h1>
+                <div class="mt-5">
+                    <x-inputs.label value="Descrição" />
+                    <x-input wire:model="descricao" class="uppercase tracking-widest text-sm"
+                        placeholder="insira uma descrição" disabled />
+                </div>
+
+                @if ($status == 'A')
+                    <div class="mt-2 flex justify-end">
+                        <x-buttons.purple x-on:click="$dispatch('open-modal-small', { name : 'finalizar' })">Finalizar
+                            compra</x-buttons.purple>
+                    </div>
+                @endif
             </div>
 
-            @if ($status == 'A')
-                <div class="mt-2 flex justify-end">
-                    <x-buttons.purple x-on:click="$dispatch('open-modal-small', { name : 'finalizar' })">Finalizar
-                        compra</x-buttons.purple>
+            <div class="bg-white p-3 mt-4 rounded-lg shadow-lg sm:block hidden">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-gray-400 uppercase text-sm tracking-widest border-b">itens</h1>
+
+                    <div x-data="{ message: false }" class="relative flex items-center gap-2">
+                        <div>
+                            <button x-on:click="message = !message;"
+                                class="font-bold tracking-widest text-blue-500 bg-blue-200 p-2 rounded-full hover:scale-95 transition-all">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M3 3H12.382C12.7607 3 13.107 3.214 13.2764 3.55279L14 5H20C20.5523 5 21 5.44772 21 6V17C21 17.5523 20.5523 18 20 18H13.618C13.2393 18 12.893 17.786 12.7236 17.4472L12 16H5V22H3V3Z">
+                                    </path>
+                                </svg>
+                            </button>
+
+                            <div x-show="message">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @keydown.escape="message = false; " @click.away="message = false;"
+                                    class="absolute right-1 z-40 w-56 p-2 mt-4 space-y-4 text-gray-600 bg-white border shadow-lg rounded-md dark:shadow-gray-800 dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
+                                    aria-label="submenu">
+
+                                    <h1 class="font-bold tracking-wider">Legendas</h1>
+
+                                    <div class="space-y-2 text-xs font-bold">
+                                        <div class="mt-2">
+                                            <div class="relative flex gap-1 items-center">
+                                                <div class="bg-orange-300 p-2 rounded-full"></div>
+                                                <x-inputs.label value="{{ 'Não conferido' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <div class="relative flex gap-1 items-center">
+                                                <div class="bg-blue-300 p-2 rounded-full"></div>
+                                                <x-inputs.label value="{{ 'Conferido' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <div class="relative flex gap-1 items-center">
+                                                <div class="bg-red-300 p-2 rounded-full"></div>
+                                                <x-inputs.label value="{{ 'Qtd comprada maior' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <div class="relative flex gap-1 items-center">
+                                                <div class="bg-green-300 p-2 rounded-full"></div>
+                                                <x-inputs.label value="{{ 'Não encontrado' }}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+
+                        @if ($status == 'A')
+                            <x-buttons.primary wire:click="produto(0)"
+                                x-on:click="$dispatch('open-modal-small', { name : 'cadastro' }), adicionar()">
+                                Adicionar item
+                            </x-buttons.primary>
+                        @endif
+                    </div>
                 </div>
-            @endif
+
+                <div class="border my-2 mx-32 dark:border-gray-700"></div>
+
+                <div class="sm:block hidden mt-4">
+                    <!-- Ordenação -->
+                    <div class="flex flex-wrap gap-2 mb-2 text-xs">
+                        <div
+                            class="p-1 text-left border-2 rounded-md hover:text-blue-800 dark:hover:text-blue-500 dark:border-gray-700">
+                            <div class="flex items-center cursor-pointer" wire:click="sortBy('nome')">
+                                <button
+                                    class="text-xs font-bold leading-4 tracking-wider uppercase text-gray-500">Nome</button>
+                                @include('includes.icon-filter', ['field' => 'nome'])
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-1 text-left border-2 rounded-md hover:text-blue-800 dark:hover:text-blue-500 dark:border-gray-700">
+                            <div class="flex items-center cursor-pointer" wire:click="sortBy('quantidade')">
+                                <button class="text-xs font-bold leading-4 tracking-wider uppercase text-gray-500">Qtd
+                                    Comprada</button>
+                                @include('includes.icon-filter', ['field' => 'quantidade'])
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ Ordenação -->
+                </div>
+
+                <!-- CARD -->
+                <div class="flex flex-col gap-4">
+                    @foreach ($itens as $item)
+                        <div wire:click="produto({{ $item->produto_codigo }})"
+                            x-on:click="$dispatch('open-modal-small', { name : 'produto' }), produto()"
+                            class="flex flex-row gap-3 p-2 space-y-0 rounded-xl border-2 shadow-lg transition-all hover:scale-95 @if ($item->faltando == 'S') bg-green-300 border-green-300 @else {{ $item->quantidade == $item->quantidade_pedida ? 'bg-blue-300 border-blue-300' : '' }} {{ $item->quantidade < $item->quantidade_pedida ? 'bg-orange-300 border-orange-300' : '' }} {{ $item->quantidade > $item->quantidade_pedida ? 'bg-red-300 border-red-300' : '' }} @endif ">
+                            <div
+                                class="relative flex justify-center object-none content-center w-24 overflow-hidden rounded justify-items-center">
+                                <img src="{{ asset('img/foto.png') }}" alt="sem foto">
+                            </div>
+
+                            <div class="space-y-1 tracking-widest">
+                                <h1 class="text-sm font-bold text-blue-500">#{{ $item->produto_codigo }}</h1>
+
+                                <div class="font-bold uppercase text-blue-500">
+                                    {{ $item->nome }}
+                                </div>
+
+                                <div class="text-xs font-bold uppercase">
+                                    valor: R${{ number_format($item->valor, 2, ',') }}
+                                </div>
+
+                                <div class="text-xs font-bold uppercase">
+                                    qtd: {{ $item->quantidade_pedida }}
+                                </div>
+
+                                <div class="text-xs font-bold uppercase">
+                                    qtd comprada: {{ $item->quantidade }}
+                                </div>
+
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <!--./CARD -->
+            </div>
         </div>
+
 
         <div class="bg-white p-3 rounded-lg shadow-lg hidden sm:block">
             <h1 class="text-gray-400 uppercase text-sm tracking-widest border-b">Totais</h1>
 
+
+            <div class="flex justify-between items-end text-sm font-bold uppercase tracking-wider text-gray-500">
+                <h1>total da compra:</h1>
+                <span class="text-lg text-blue-400">R$ {{ number_format($totalLista, 2, ',') }}</span>
+            </div>
         </div>
 
         <div x-data="{ message: false }" class="bg-white p-3 rounded-lg shadow-lg block sm:hidden">
@@ -166,7 +304,8 @@
                 <form wire:submit="adicionarItem(item.qtd)" class="flex flex-col gap-5">
                     <div>
                         <x-inputs.label value="nome*" />
-                        <x-input wire:model="nome" class="uppercase tracking-widest" placeholder="insira o nome" required />
+                        <x-input wire:model="nome" class="uppercase tracking-widest" placeholder="insira o nome"
+                            required />
                     </div>
 
                     <div>

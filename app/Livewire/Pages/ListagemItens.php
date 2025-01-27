@@ -5,6 +5,7 @@ namespace App\Livewire\Pages;
 use App\Models\Lista;
 use App\Models\ListaItem;
 use App\Models\Produto;
+use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -323,6 +324,7 @@ class ListagemItens extends Component
     {
         $item = Lista::where('id', $this->listaId)->update([
             'status' => 'C',
+            'data_conclusao' => Carbon::now()->format('Y-m-d'),
         ]);
 
         if ($item) {

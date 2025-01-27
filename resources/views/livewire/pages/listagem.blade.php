@@ -163,11 +163,13 @@
                                 </td>
 
                                 <td class="py-3 pr-8 text-center">
-                                    {{ $lista->data_criacao }}
+                                    {{ date('d/m/Y', strtotime($lista->data_criacao)) }}
                                 </td>
 
                                 <td class="py-3 pr-8 text-center">
-                                    {{ $lista->data_conclusao }}
+                                    @if ($lista->data_conclusao)
+                                        {{ date('d/m/Y', strtotime($lista->data_conclusao)) }}
+                                    @endif
                                 </td>
 
                                 <td x-data="{ menu: false, tooltip: 'nenhum' }" class="relative py-3 text-center flex justify-center">

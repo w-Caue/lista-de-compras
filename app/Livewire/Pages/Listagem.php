@@ -78,7 +78,6 @@ class Listagem extends Component
             'descricao' => $this->descricao,
             'observacao' => $this->obs,
             'data_criacao' => Carbon::now()->format('Y-m-d'),
-            'data_conclusao' => Carbon::now()->format('Y-m-d'),
         ]);
 
         if ($lista->save()) {

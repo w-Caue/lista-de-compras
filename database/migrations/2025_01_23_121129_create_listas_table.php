@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('observacao')->nullable();
             $table->enum('status', ['A', 'C'])->default('A');
             $table->dateTime('data_criacao');
-            $table->dateTime('data_conclusao');
+            $table->dateTime('data_conclusao')->nullable();
             $table->timestamps();
 
             $table->foreign('usuario')->references('id')->on('users');
