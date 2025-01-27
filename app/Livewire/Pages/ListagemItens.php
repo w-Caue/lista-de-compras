@@ -179,12 +179,12 @@ class ListagemItens extends Component
         $this->faltandoProduto = $produto->faltando;
     }
 
-    public function conferindoItem($quantidade, $quantidadePedida)
+    public function conferindoItem($quantidade)
     {
         $produto = Produto::where('id', $this->codigoProduto)->update([
             'marca' => $this->marca,
             'descricao' => $this->desc,
-            'quantidade' => $quantidadePedida,
+            'quantidade' => $this->quantidadePedida,
             'observacao' => $this->observacao,
         ]);
 

@@ -375,34 +375,15 @@
                             maxlength="50" count placeholder="..." />
                     </div> --}}
 
-                    <div class="flex flex-col items-center">
+                    <div >
                         <x-inputs.label value="{{ 'Qtd Pedida' }}" />
-                        <div class="flex items-center gap-1">
-                            <button x-on:click="removePedida()"
-                                class="text-white bg-red-500 p-1 rounded-full transition-all hover:scale-95">
-                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path d="M19 11H5V13H19V11Z"></path>
-                                </svg>
-                            </button>
 
-                            <div class="w-20">
-                                <x-input class="text-center" x-model.number="item.qtdPedida"
-                                    wire:model="quantidadePedida"
-                                    x-mask:dynamic="$input.startsWith('37')
+                        <div class="w-20">
+                            <x-input class="text-center" wire:model="quantidadePedida"
+                                x-mask:dynamic="$input.startsWith('37')
                                 ? '999999999' : '999999999'
                         " />
-                            </div>
-
-                            <button x-on:click="item.qtdPedida++"
-                                class="text-white bg-blue-500 p-1 rounded-full transition-all hover:scale-95">
-                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
-                                </svg>
-                            </button>
                         </div>
-
                     </div>
 
                     @if ($status == 'A')
@@ -412,7 +393,7 @@
 
                                 <div class="w-32">
                                     <x-input wire:model="preco" x-model.number="item.valor"
-                                        x-mask:dynamic="$money($input)" />
+                                        x-mask:dynamic="$money($input, ',')" />
                                 </div>
                             </div>
 
@@ -483,7 +464,7 @@
 
 
                             <x-buttons.primary
-                                wire:click="conferindoItem(item.qtd,item.qtdPedida)">Adicionar</x-buttons.primary>
+                                wire:click="conferindoItem(item.qtd)">Adicionar</x-buttons.primary>
                         </div>
                     @endif
                 </div>
@@ -555,7 +536,6 @@
         const app = {
             item: {
                 qtd: {{ $quantidade }},
-                qtdPedida: {{ $quantidadePedida }},
                 valor: '',
                 total: 0,
             },
@@ -563,7 +543,7 @@
                 if (this.item.valor == 0) {
                     this.item.qtd = 0;
                 };
-
+              
                 this.item.qtd++;
                 this.item.total = this.item.valor * this.item.qtd;
             },
@@ -579,13 +559,6 @@
                 if (this.item.qtd < 0) {
                     this.item.qtd = 0;
                     this.item.total = 0;
-                }
-            },
-            removePedida() {
-                this.item.qtdPedida--;
-
-                if (this.item.qtdPedida < 0) {
-                    this.item.qtdPedida = 0;
                 }
             },
             produto() {
