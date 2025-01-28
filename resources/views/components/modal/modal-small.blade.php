@@ -12,8 +12,9 @@
             class="w-full px-4 py-4 overflow-hidden dark:text-gray-400 bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-lg">
             <div class="flex justify-between items-start mx-1 mb-5 py-2">
 
-                <div class="">
-                    <h1 class="text-lg tracking-widest uppercase font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">{{ $title }} {{ $subtitle }}</h1>
+                <div
+                    class="text-2xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">
+                    {{ $title }} {{ $subtitle }}
                 </div>
 
                 <button

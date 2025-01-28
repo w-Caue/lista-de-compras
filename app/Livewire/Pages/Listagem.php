@@ -3,6 +3,8 @@
 namespace App\Livewire\Pages;
 
 use App\Models\Lista;
+use App\Models\ListaItem;
+use App\Models\Produto;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +30,12 @@ class Listagem extends Component
 
     public $descricao;
     public $obs;
+
+    #DUPLICAR LISTA
+    public $codListaDuplicada;
+    public $descricaoDup;
+    public $obsDup;
+    public $qtdDuplicada = 'N';
 
     public function load()
     {
@@ -82,6 +90,57 @@ class Listagem extends Component
 
         if ($lista->save()) {
             $this->alert('success', 'Lista criada!', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => false,
+            ]);
+
+            return redirect()->route('listagem-itens', ['codigo' => $lista->id]);
+        }
+    }
+
+    public function codigoDuplicar($codigo)
+    {
+        $this->codListaDuplicada = $codigo;
+    }
+
+    public function duplicarLista()
+    {
+        $lista = Lista::create([
+            'usuario' => Auth::user()->id,
+            'descricao' => $this->descricaoDup,
+            'observacao' => $this->obsDup,
+            'data_criacao' => Carbon::now()->format('Y-m-d'),
+        ]);
+
+        if ($lista->save()) {
+            $itens = ListaItem::select([
+                'listas_itens.*',
+                'produtos.id as produto_codigo',
+                'produtos.nome',
+                'produtos.marca',
+                'produtos.descricao',
+                'produtos.quantidade as quantidade_pedida',
+            ])
+                ->leftjoin('produtos', 'produtos.id', '=', 'listas_itens.produto_id')
+                ->where('listas_itens.lista_id', $this->codListaDuplicada)
+                ->get();
+
+            foreach ($itens as $item) {
+                $produto = Produto::create([
+                    'nome' => $item->nome,
+                    'descricao' => $item->descricao,
+                    'marca' => $item->marca,
+                    'quantidade' => $item->quantidade_pedida,
+                ]);
+
+                ListaItem::create([
+                    'lista_id' => $lista->id,
+                    'produto_id' => $produto->id,
+                ]);
+            }
+
+            $this->alert('success', 'Lista Duplicada!', [
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => false,

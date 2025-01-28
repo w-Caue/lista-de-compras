@@ -130,8 +130,6 @@
                             </div>
 
                             <div class="space-y-1 tracking-widest">
-                                <h1 class="text-sm font-bold text-blue-500">#{{ $item->produto_codigo }}</h1>
-
                                 <div class="font-bold uppercase text-blue-500">
                                     {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
                                 </div>
@@ -272,8 +270,6 @@
                         </div>
 
                         <div class="space-y-1 tracking-widest">
-                            <h1 class="text-sm font-bold text-blue-500">#{{ $item->produto_codigo }}</h1>
-
                             <div class="font-bold uppercase text-blue-500">
                                 {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
                             </div>

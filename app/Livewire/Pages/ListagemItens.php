@@ -153,6 +153,7 @@ class ListagemItens extends Component
     {
         if ($codigo == 0) {
             $this->nome = '';
+            $this->desc = '';
             return;
         }
 
