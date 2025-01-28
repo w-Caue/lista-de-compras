@@ -214,20 +214,77 @@
         <div class="w-full overflow-y-auto p-4 block lg:hidden space-y-6">
             @foreach ($listas as $lista)
                 <div wire:key="{{ $lista->id }}"
-                    onclick="window.location.href='{{ route('listagem-itens', ['codigo' => $lista->id]) }}'"
-                    class="w-full p-3 rounded-lg space-y-2 border-2 shadow-md transition-all hover:scale-95 {{ $lista->status == 'C' ? 'text-gray-600 bg-blue-300 border-blue-300' : 'text-gray-500' }}">
+                    class="w-full p-3 rounded-lg space-y-2 border-2 transition-all hover:scale-95 {{ $lista->status == 'C' ? 'text-gray-600 bg-blue-300 border-blue-300' : 'text-gray-500' }}">
                     <div class="flex justify-between items-center">
-                        <span class="font-bold text-blue-500">#{{ $lista->id }}</span>
 
-                        <h1 class="font-bold text-md uppercase tracking-widest text-blue-500">
-                            {{ $lista->nome_usuario }}
-                        </h1>
+                        <h1 class="font-bold uppercase tracking-widest my-1 text-blue-500">{{ $lista->descricao }}</h1>
 
-                        <h1 class="font-bold text-sm uppercase tracking-widest">
-                            {{ date('d/m/Y', strtotime($lista->data_criacao)) }}</h1>
+                        <div x-data="{ menu: false, tooltip: 'nenhum' }" class="relative flex items-center space-x-2">
+
+                            <button x-on:click="menu = !menu;" @keydown.escape="menu = false"
+                                @click.away="menu = false;"
+                                class="flex items-center justify-between px-2 py-2 font-medium leading-5 text-blue-600 rounded-full hover:bg-gray-200 hover:scale-95 dark:hover:text-white
+                                         dark:text-gray-400 dark:hover:bg-gray-700">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z">
+                                    </path>
+                                </svg>
+                            </button>
+
+                            <template x-if="menu">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @keydown.escape="menu = false; "
+                                    class="absolute right-7 top-8 z-40 w-44 p-2 mt-4 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md"
+                                    aria-label="submenu">
+
+                                    <li class="flex">
+                                        <button
+                                            onclick="window.location.href='{{ route('listagem-itens', ['codigo' => $lista->id]) }}'"
+                                            class="inline-flex items-center w-full px-2 py-1 text-xs font-semibold uppercase transition-colors duration-150 rounded-md bg-blue-100 text-blue-600">
+                                            <svg class="size-5 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748ZM12.1779 7.17624C11.4834 7.48982 11 8.18846 11 9C11 10.1046 11.8954 11 13 11C13.8115 11 14.5102 10.5166 14.8238 9.82212C14.9383 10.1945 15 10.59 15 11C15 13.2091 13.2091 15 11 15C8.79086 15 7 13.2091 7 11C7 8.79086 8.79086 7 11 7C11.41 7 11.8055 7.06167 12.1779 7.17624Z">
+                                                </path>
+                                            </svg>
+
+                                            <span>Ver Lista</span>
+                                        </button>
+
+                                    </li>
+
+                                    <li class="flex">
+                                        <button wire:click="codigoDuplicar({{ $lista->id }})" x-data
+                                            x-on:click="$dispatch('open-modal-small', { name : 'duplicarLista' })"
+                                            class="inline-flex items-center w-full px-2 py-1 text-xs font-semibold uppercase transition-colors duration-150 rounded-md bg-red-100 text-red-600">
+                                            <svg class="size-5 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6ZM6.9998 11V13H12.9998V11H6.9998ZM6.9998 15V17H12.9998V15H6.9998Z">
+                                                </path>
+                                            </svg>
+
+                                            <span>Duplicar Lista</span>
+                                        </button>
+
+                                    </li>
+                                </ul>
+                            </template>
+                        </div>
                     </div>
 
-                    <h1 class="font-bold uppercase tracking-widest my-4">{{ $lista->descricao }}</h1>
+                    <h1 class="font-bold uppercase text-sm tracking-widest my-4">data criação:
+                        {{ date('d/m/Y', strtotime($lista->data_criacao)) }}
+                    </h1>
+
+                    @if ($lista->data_conclusao)
+                        <h1 class="font-bold uppercase text-sm tracking-widest my-4">data conclusão:
+                            {{ date('d/m/Y', strtotime($lista->data_conclusao)) }}
+                        </h1>
+                    @endif
                 </div>
             @endforeach
         </div>

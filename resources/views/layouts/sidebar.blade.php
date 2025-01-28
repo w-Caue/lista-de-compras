@@ -38,7 +38,7 @@
             'top-0 -left-80': !sidebar.navOpen
         }">
 
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center justify-between gap-2 ">
             <div
                 class="text-2xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-300">
                 My List
@@ -54,7 +54,7 @@
             </button>
         </div>
 
-        <div class="relative mt-4 space-y-4 text-xs uppercase font-bold">
+        <div class="relative mt-4 space-y-4 uppercase text-sm font-bold tracking-widest">
 
             <div class="border dark:border-gray-700"></div>
 
