@@ -133,7 +133,7 @@
                                 <h1 class="text-sm font-bold text-blue-500">#{{ $item->produto_codigo }}</h1>
 
                                 <div class="font-bold uppercase text-blue-500">
-                                    {{ $item->nome }}
+                                    {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
                                 </div>
 
                                 <div class="text-xs font-bold uppercase">
@@ -145,7 +145,7 @@
                                 </div>
 
                                 <div class="text-xs font-bold uppercase">
-                                    qtd comprada: {{ $item->quantidade }}
+                                    qtd comprada: {{ $item->quantidade }} @if ($item->total) | total comprado: R${{ number_format($item->total, 2, ',') }}@endif
                                 </div>
 
                             </div>
@@ -275,7 +275,7 @@
                             <h1 class="text-sm font-bold text-blue-500">#{{ $item->produto_codigo }}</h1>
 
                             <div class="font-bold uppercase text-blue-500">
-                                {{ $item->nome }}
+                                {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
                             </div>
 
                             <div class="text-xs font-bold uppercase">
@@ -375,7 +375,7 @@
                             maxlength="50" count placeholder="..." />
                     </div> --}}
 
-                    <div >
+                    <div>
                         <x-inputs.label value="{{ 'Qtd Pedida' }}" />
 
                         <div class="w-20">
@@ -392,7 +392,7 @@
                                 <x-inputs.label value="{{ 'Preço' }}" />
 
                                 <div class="w-32">
-                                    <x-input wire:model="preco" x-model.number="item.valor"
+                                    <x-input wire:model="preco" x-model="item.valor"
                                         x-mask:dynamic="$money($input, ',')" />
                                 </div>
                             </div>
@@ -463,8 +463,7 @@
                             </div>
 
 
-                            <x-buttons.primary
-                                wire:click="conferindoItem(item.qtd)">Adicionar</x-buttons.primary>
+                            <x-buttons.primary wire:click="conferindoItem(item.qtd)">Adicionar</x-buttons.primary>
                         </div>
                     @endif
                 </div>
@@ -543,9 +542,13 @@
                 if (this.item.valor == 0) {
                     this.item.qtd = 0;
                 };
-              
+
+                this.item.valor = this.item.valor.toString().replace(",", ".");
+
                 this.item.qtd++;
                 this.item.total = this.item.valor * this.item.qtd;
+
+                this.item.valor = this.item.valor.toString().replace(".", ",");
             },
             remove() {
                 if (this.item.valor == 0) {
@@ -554,7 +557,11 @@
 
                 this.item.qtd--;
 
+                this.item.valor = this.item.valor.toString().replace(",", ".");
+
                 this.item.total = this.item.total - this.item.valor;
+
+                this.item.valor = this.item.valor.toString().replace(".", ",");
 
                 if (this.item.qtd < 0) {
                     this.item.qtd = 0;

@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon-96x96.png') }}">
+
     <style>
         body {
             background-image: url("../img/comercio.png");

@@ -5,7 +5,7 @@
         class="flex-shrink-0 bg-white transition-all duration-300 mx-5 my-4 rounded-lg shadow-lg shadow-gray-300 p-4 hidden lg:block dark:bg-gray-800 dark:shadow-gray-700">
 
         <div
-            class="text-2xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-300">
+            class="text-2xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">
             My List
         </div>
         <div class="relative justify-center items-center mt-4 space-y-4 text-sm font-bold tracking-widest">

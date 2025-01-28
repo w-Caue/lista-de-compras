@@ -29,7 +29,6 @@ class ListagemItens extends Component
     public $preco;
     public $observacao;
     public $totalProduto;
-    public $quantidadeProduto;
     public $faltandoProduto;
 
     #LISTA ITEM
@@ -40,6 +39,7 @@ class ListagemItens extends Component
     public $totalLista;
     public $produtosComprados;
     public $produtosFaltando;
+    public $quantidadeProduto;
 
     public $codigoProduto;
 
@@ -71,6 +71,7 @@ class ListagemItens extends Component
             'produtos.id as produto_codigo',
             'produtos.nome',
             'produtos.marca',
+            'produtos.descricao',
             'produtos.quantidade as quantidade_pedida',
         ])
             ->leftjoin('produtos', 'produtos.id', '=', 'listas_itens.produto_id')
@@ -84,7 +85,9 @@ class ListagemItens extends Component
 
         $total = 0;
         foreach ($itens as $item) {
-            $total += $item->total;
+            if ($item->faltando == 'N') {
+                $total += $item->total;
+            }
         }
         $this->totalLista = $total;
 
@@ -172,7 +175,7 @@ class ListagemItens extends Component
         $this->nome = $produto->nome;
         $this->marca = $produto->marca;
         $this->desc = $produto->descricao;
-        $this->observacao = $produto->observacao;
+        $this->preco = number_format($produto->valor, 2, ',');
         $this->totalProduto = $produto->total;
         $this->quantidadeProduto = $produto->quantidade;
         $this->quantidadePedida = $produto->quantidade_pedida;
@@ -189,11 +192,12 @@ class ListagemItens extends Component
         ]);
 
         $produto;
+        $this->preco = str_replace(",", ".", $this->preco);
 
         $item = ListaItem::where('produto_id', $this->codigoProduto)->update([
-            'valor' => $this->preco,
+            'valor' => floatval($this->preco),
             'quantidade' => $quantidade,
-            'total' => $this->preco * $quantidade,
+            'total' => floatval($this->preco) * $quantidade,
         ]);
 
         $this->dispatch('close-modal-small');

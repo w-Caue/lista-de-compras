@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon-96x96.png') }}">
+
     <tallstackui:script />
 
     <style>
@@ -33,21 +36,21 @@
     <div>
         <section class="content-block">
             <div class="flex items-center min-h-screen p-6 ">
-                <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl">
+                <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-gray-50 rounded-xl shadow-xl">
                     <div class="flex flex-col overflow-y-auto md:flex-row">
-                        <div class="h-32 md:h-auto md:w-1/2">
-
-                            <div class="flex flex-col items-center justify-center w-full h-full p-6 sm:p-6 ">
+                        <div class="flex justify-center mt-2 sm:mt-0">
+                            <img class="rounded-full h-56 sm:h-auto sm:rounded-xl"
+                                src="{{ asset('img/logo lista.png') }}" alt="logo">
+                        </div>
+                        <div class="flex items-center justify-center p-3 sm:p-12 md:w-1/2">
+                            <div class="w-full">
                                 <div
-                                    class="text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600">
+                                    class="text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500 hidden sm:block">
                                     My List
                                 </div>
-                                <span class="font-bold text-gray-500 tracking-widest">Crie sua lista</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-                            <div class="w-full">
-                                <h1 class="mb-4 text-lg text-center tracking-widest uppercase font-bold text-gray-400">
+
+                                <h1
+                                    class="sm:mb-4 text-lg text-center tracking-widest uppercase font-bold text-gray-400">
                                     Conecte-se
                                 </h1>
                                 <div>

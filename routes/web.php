@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('login');
 
 Route::get('logout', function () {
     Auth::logout(false);
     session()->flush();
 
-    return redirect()->route('welcome');
+    return redirect()->route('login');
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
