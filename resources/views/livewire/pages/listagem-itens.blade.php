@@ -17,12 +17,23 @@
                         placeholder="insira uma descrição" disabled />
                 </div>
 
-                @if ($status == 'A')
+                <div class="flex gap-3">
                     <div class="mt-2 flex justify-end">
-                        <x-buttons.purple x-on:click="$dispatch('open-modal-small', { name : 'finalizar' })">Finalizar
-                            compra</x-buttons.purple>
+                        <a href="{{ route('pdf', ['codigo' => $listaId]) }}"
+                            class="px-2 py-2 text-sm font-semibold uppercase tracking-widest leading-5 rounded-md text-orange-500 bg-orange-200 focus:outline-orange ease-linear duration-300 transition-all hover:scale-95"
+                            target="_blank">
+                            Gerar Pdf
+                        </a>
                     </div>
-                @endif
+
+                    @if ($status == 'A')
+                        <div class="mt-2 flex justify-end">
+                            <x-buttons.purple
+                                x-on:click="$dispatch('open-modal-small', { name : 'finalizar' })">Finalizar
+                                compra</x-buttons.purple>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             <div class="bg-white p-3 mt-4 rounded-lg shadow-lg sm:block hidden">
@@ -131,7 +142,9 @@
 
                             <div class="space-y-1 tracking-widest">
                                 <div class="font-bold uppercase text-blue-500">
-                                    {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
+                                    {{ $item->nome }} @if ($item->descricao)
+                                        - {{ $item->descricao }}
+                                    @endif
                                 </div>
 
                                 <div class="text-xs font-bold uppercase">
@@ -143,7 +156,9 @@
                                 </div>
 
                                 <div class="text-xs font-bold uppercase">
-                                    qtd comprada: {{ $item->quantidade }} @if ($item->total) | total comprado: R${{ number_format($item->total, 2, ',') }}@endif
+                                    qtd comprada: {{ $item->quantidade }} @if ($item->total)
+                                        | total comprado: R${{ number_format($item->total, 2, ',') }}
+                                    @endif
                                 </div>
 
                             </div>
@@ -271,7 +286,9 @@
 
                         <div class="space-y-1 tracking-widest">
                             <div class="font-bold uppercase text-blue-500">
-                                {{ $item->nome }} @if ($item->descricao) - {{ $item->descricao }}@endif
+                                {{ $item->nome }} @if ($item->descricao)
+                                    - {{ $item->descricao }}
+                                @endif
                             </div>
 
                             <div class="text-xs font-bold uppercase">

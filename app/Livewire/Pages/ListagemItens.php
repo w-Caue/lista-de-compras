@@ -5,6 +5,7 @@ namespace App\Livewire\Pages;
 use App\Models\Lista;
 use App\Models\ListaItem;
 use App\Models\Produto;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -347,6 +348,11 @@ class ListagemItens extends Component
     {
         $this->produtosComprados = ListaItem::where('lista_id', $this->listaId)->where('quantidade', '>', 0)->count();
         $this->produtosFaltando = ListaItem::where('lista_id', $this->listaId)->where('faltando', 'S')->count();
+    }
+
+    public function gerarPDF()
+    {
+        return redirect()->route('pdf', ['codigo' => '1']);
     }
 
     #[Layout('layouts.app')]
